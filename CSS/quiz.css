@@ -41,6 +41,12 @@ body.dark-mode {
     --border: #374151;
 }
 
+.highlighted {
+    border: 2px solid var(--primary);
+    border-radius: 12px;
+    transition: 0.3s ease;
+}
+
 main {
     margin-left: 270px;
     width: calc(100% - 270px);
@@ -595,13 +601,6 @@ nav {
 .category-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-}
-
-.categories-section.highlighted {
-    border: 2px solid var(--primary);
-    border-radius: 12px;
-    padding: 10px;
-    transition: 0.3s ease;
 }
 
 .continue-quiz-section {
