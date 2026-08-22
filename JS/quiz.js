@@ -56,6 +56,9 @@ const sections = document.querySelectorAll(
     ".quiz-container, .categories-section, .continue-quiz-section, .recommended-section, .daily-challenge, .statistics-card, .leaderboard-card, .user-profile, .invite-card"
 );
 
+const categoryCards = document.querySelectorAll(".category-card");
+console.log(categoryCards);
+
 
 navItems.forEach(function (item) {
 
@@ -125,3 +128,41 @@ navItems.forEach(function (item) {
     });
 
 });
+
+categoryCards.forEach(function (card) {
+
+    card.addEventListener("click", function () {
+        const categoryName = card.querySelector("h4").textContent;
+        console.log(categoryName);
+
+        const selectedQuestions = quizQuestions[categoryName];
+        console.log(selectedQuestions);
+    });
+
+});
+
+const quizQuestions = {
+
+    Science: [
+
+        {
+            question: "What is the chemical symbol for water?",
+            options: ["H₂O", "CO₂", "O₂", "NaCl"],
+            answer: "H₂O"
+        },
+
+        {
+            question: "Which planet is known as the Red Planet?",
+            options: ["Earth", "Mars", "Jupiter", "Venus"],
+            answer: "Mars"
+        },
+
+        {
+            question: "What gas do plants primarily absorb during photosynthesis?",
+            options: ["Oxygen", "Nitrogen", "Carbon dioxide", "Hydrogen"],
+            answer: "Carbon dioxide"
+        }
+
+    ]
+
+};
