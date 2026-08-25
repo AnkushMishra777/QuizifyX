@@ -1051,6 +1051,81 @@ nav {
     text-decoration: none;
 }
 
+.quiz-screen {
+    display: none;
+    width: 100%;
+    min-height: calc(100vh - 90px);
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    box-sizing: border-box;
+}
+
+.quiz-card {
+    width: 100%;
+    max-width: 800px;
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.quiz-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.quiz-header h2 {
+    margin-bottom: 10px;
+}
+
+.quiz-header p {
+    color: #777;
+}
+
+.question-container h3 {
+    font-size: 24px;
+    margin-bottom: 30px;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.options button {
+    width: 100%;
+    padding: 16px 20px;
+    text-align: left;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.2s;
+}
+
+.options button:hover {
+    border-color: #7c3aed;
+}
+
+.options button.selected {
+    border-color: #7c3aed;
+    background: #f3e8ff;
+}
+
+.next-btn {
+    margin-top: 30px;
+    padding: 13px 30px;
+    border: none;
+    border-radius: 10px;
+    background: #7c3aed;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
 /* =========================================
    RESPONSIVE DESIGN
    ========================================= */

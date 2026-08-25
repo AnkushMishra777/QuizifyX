@@ -1,5 +1,10 @@
 console.log("QuizifyX JavaScript loaded!");
 
+
+// ========================================
+// DARK MODE
+// ========================================
+
 const Darkmodetoggle = document.getElementById("toggle");
 const body = document.body;
 
@@ -14,67 +19,76 @@ else {
 Darkmodetoggle.addEventListener("change", function () {
 
     if (Darkmodetoggle.checked) {
-        console.log("It is on ");
+
+        console.log("It is on");
         body.classList.add("dark-mode");
         localStorage.setItem("Darkmode", "true");
+
     }
     else {
+
         console.log("It is off");
         body.classList.remove("dark-mode");
         localStorage.setItem("Darkmode", "false");
+
     }
 
 });
 
+
+// ========================================
+// NAVIGATION
+// ========================================
+
 const navItems = document.querySelectorAll(".nav-item");
-console.log(navItems);
 
 const welcomeMessage = document.querySelector(".message-container h2");
-console.log(welcomeMessage);
 
 welcomeMessage.textContent = "Welcome to QuizifyX!";
 
 
 const categoriesSection = document.querySelector(".categories-section");
-console.log(categoriesSection);
+
 const dashboardSection = document.querySelector(".quiz-container");
+
 const dailyChallengeSection = document.querySelector(".daily-challenge");
-console.log(dailyChallengeSection);
 
 const leaderboardSection = document.querySelector(".leaderboard-card");
 
 const QuizzesSection = document.querySelector(".recommended-section");
-console.log(QuizzesSection);
 
-const HistorySection = document.querySelector(".continue-quiz-section")
-console.log(HistorySection);
+const HistorySection = document.querySelector(".continue-quiz-section");
 
 const profileSection = document.querySelector(".user-profile");
-console.log(profileSection);
+
 
 const sections = document.querySelectorAll(
     ".quiz-container, .categories-section, .continue-quiz-section, .recommended-section, .daily-challenge, .statistics-card, .leaderboard-card, .user-profile, .invite-card"
 );
-
-const categoryCards = document.querySelectorAll(".category-card");
-console.log(categoryCards);
 
 
 navItems.forEach(function (item) {
 
     item.addEventListener("click", function () {
 
-        const clickedText = item.querySelector("span").textContent.trim().replace(/\s+/g, " ");
+        const clickedText = item
+            .querySelector("span")
+            .textContent
+            .trim()
+            .replace(/\s+/g, " ");
 
         console.log("Clicked:", clickedText);
+
 
         sections.forEach(function (section) {
             section.classList.remove("highlighted");
         });
 
+
         if (clickedText === "Dashboard") {
 
             welcomeMessage.textContent = "Welcome to QuizifyX!";
+
         }
 
         else if (clickedText === "Categories") {
@@ -119,6 +133,7 @@ navItems.forEach(function (item) {
 
         }
 
+
         navItems.forEach(function (navItem) {
             navItem.classList.remove("active");
         });
@@ -129,17 +144,12 @@ navItems.forEach(function (item) {
 
 });
 
-categoryCards.forEach(function (card) {
 
-    card.addEventListener("click", function () {
-        const categoryName = card.querySelector("h4").textContent;
-        console.log(categoryName);
+// ========================================
+// QUIZ QUESTIONS DATA
+// ========================================
 
-        const selectedQuestions = quizQuestions[categoryName];
-        console.log(selectedQuestions);
-    });
 
-});
 
 const quizQuestions = {
 
@@ -166,3 +176,199 @@ const quizQuestions = {
     ]
 
 };
+
+
+// ========================================
+// QUIZ SCREEN ELEMENTS
+// ========================================
+
+const quizScreen = document.querySelector(".quiz-screen");
+
+const quizTitle = document.querySelector(".quiz-header h2");
+
+const questioncounter = document.querySelector(".quiz-header p");
+
+const Questions = document.querySelector(".question-container h3");
+
+const optionsContainer = document.querySelector(".options");
+
+const nextButton = document.querySelector(".next-btn");
+
+
+// ========================================
+// QUIZ STATE
+// ========================================
+
+let selectedQuestions = [];
+
+let currentQuestionIndex = 0;
+
+let userAnswers = [];
+
+let selectedAnswer = null;
+
+// ========================================
+// SHOW QUESTION
+// ========================================
+
+function showQuestion() {
+
+    const currentQuestion =
+        selectedQuestions[currentQuestionIndex];
+
+
+    Questions.textContent =
+        currentQuestion.question;
+
+
+    questioncounter.textContent =
+        `Question ${currentQuestionIndex + 1} of ${selectedQuestions.length}`;
+
+
+    optionsContainer.innerHTML = "";
+
+
+    selectedAnswer = null;
+
+
+    currentQuestion.options.forEach(function (option) {
+
+        const optionButton =
+            document.createElement("button");
+
+        optionButton.textContent = option;
+
+
+        optionButton.addEventListener("click", function () {
+
+            selectedAnswer = option;
+
+            console.log("Selected answer:", selectedAnswer);
+
+
+            const allOptionButtons =
+                optionsContainer.querySelectorAll("button");
+
+
+            allOptionButtons.forEach(function (button) {
+
+                button.classList.remove("selected");
+
+            });
+
+
+            optionButton.classList.add("selected");
+
+        });
+
+
+        optionsContainer.appendChild(optionButton);
+
+    });
+
+}
+
+
+// ========================================
+// CATEGORY SELECTION
+// ========================================
+
+const categoryCards =
+    document.querySelectorAll(".category-card");
+
+
+categoryCards.forEach(function (card) {
+
+    card.addEventListener("click", function () {
+
+        const categoryName =
+            card.querySelector("h4").textContent.trim();
+
+
+        console.log("Selected category:", categoryName);
+
+
+        selectedQuestions =
+            quizQuestions[categoryName];
+
+
+        console.log(
+            "Selected questions:",
+            selectedQuestions
+        );
+
+
+        // If category doesn't have questions
+        if (!selectedQuestions) {
+
+            console.log(
+                "No questions available for this category."
+            );
+
+            return;
+
+        }
+
+       
+        // Start from Question 1
+        currentQuestionIndex = 0;
+        userAnswers = [];
+
+
+        // Change quiz title
+        quizTitle.textContent =
+            categoryName + " Quiz";
+
+
+        // Display Question 1
+        showQuestion();
+
+        quizScreen.style.display = "flex";
+        
+    });
+
+});
+
+
+// ========================================
+// NEXT BUTTON
+// ========================================
+
+nextButton.addEventListener("click", function () {
+
+    if (selectedAnswer === null) {
+
+        console.log("Please select an answer first.");
+
+        return;
+
+    }
+
+
+    userAnswers[currentQuestionIndex] =
+        selectedAnswer;
+
+
+    console.log("Saved answers:", userAnswers);
+
+
+    if (
+        currentQuestionIndex <
+        selectedQuestions.length - 1
+    ) {
+
+        currentQuestionIndex++;
+
+        showQuestion();
+
+    }
+
+    else {
+
+        console.log("Quiz completed!");
+
+        console.log("Final answers:", userAnswers);
+
+    }
+
+});
