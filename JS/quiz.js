@@ -882,12 +882,11 @@ const dashboardStartQuizButton =
 const startQuizButton =
     document.querySelector(".quiz-setup .start-quiz-btn");
 
-    console.log("Dashboard start button:", dashboardStartQuizButton);
-    console.log("Quiz setup start button:", startQuizButton);
+console.log("Dashboard start button:", dashboardStartQuizButton);
+console.log("Quiz setup start button:", startQuizButton);
 
 const questionCountButtons =
     document.querySelectorAll(".question-count-btn");
-
 
 // ========================================
 // QUIZ STATE
@@ -907,6 +906,26 @@ let selectedCategory = "";
 
 let selectedQuestionCount = null;
 
+const quizProgress = {
+    category: selectedCategory,
+    selectedQuestions: selectedQuestions,
+    currentQuestionIndex: currentQuestionIndex,
+    userAnswers: userAnswers,
+    score: score
+};
+
+// ========================================
+// SAVE QUIZ PROGRESS
+// ========================================
+
+function saveQuizProgress() {
+
+    localStorage.setItem(
+        "quizProgress",
+        JSON.stringify(quizProgress)
+    );
+
+}
 
 // ========================================
 // RESET QUIZ STATE
@@ -924,7 +943,6 @@ function resetQuizState() {
 
 }
 
-
 // ========================================
 // SHOW QUESTION
 // ========================================
@@ -934,28 +952,20 @@ function showQuestion() {
     const currentQuestion =
         selectedQuestions[currentQuestionIndex];
 
-
     Questions.textContent =
         currentQuestion.question;
-
 
     questioncounter.textContent =
         `Question ${currentQuestionIndex + 1} of ${selectedQuestions.length}`;
 
-
     optionsContainer.innerHTML = "";
-
 
     selectedAnswer = null;
 
-
     currentQuestion.options.forEach(function (option) {
-
         const optionButton =
             document.createElement("button");
-
         optionButton.textContent = option;
-
 
         optionButton.addEventListener("click", function () {
 
@@ -966,10 +976,8 @@ function showQuestion() {
                 selectedAnswer
             );
 
-
             const allOptionButtons =
                 optionsContainer.querySelectorAll("button");
-
 
             allOptionButtons.forEach(function (button) {
 
@@ -977,18 +985,15 @@ function showQuestion() {
 
             });
 
-
             optionButton.classList.add("selected");
 
         });
-
 
         optionsContainer.appendChild(optionButton);
 
     });
 
 }
-
 
 // ========================================
 // SCORE CALCULATION
@@ -997,7 +1002,6 @@ function showQuestion() {
 function calculateScore() {
 
     score = 0;
-
 
     userAnswers.forEach(function (answer, index) {
 
@@ -1012,11 +1016,9 @@ function calculateScore() {
 
     });
 
-
     return score;
 
 }
-
 
 // ========================================
 // RESULT MESSAGE
@@ -1069,16 +1071,13 @@ categoryCards.forEach(function (card) {
         selectedCategory =
             card.querySelector("h4").textContent.trim();
 
-
         console.log(
             "Selected category:",
             selectedCategory
         );
 
-
         selectedQuestions =
             quizQuestions[selectedCategory];
-
 
         console.log(
             "Selected questions:",
@@ -1090,21 +1089,15 @@ categoryCards.forEach(function (card) {
             console.log(
                 "No questions available for this category."
             );
-
             return;
-
         }
-
 
         resetQuizState();
 
-
         selectedQuestionCount = null;
-
 
         quizTitle.textContent =
             selectedCategory + " Quiz";
-
 
         result.style.display = "none";
 
@@ -1117,7 +1110,6 @@ categoryCards.forEach(function (card) {
         quizScreen.style.display = "flex";
 
         dashboardLayout.style.display = "none";
-
 
         questionCountButtons.forEach(function (button) {
 
@@ -1137,30 +1129,20 @@ categoryCards.forEach(function (card) {
 questionCountButtons.forEach(function (button) {
 
     button.addEventListener("click", function () {
-
         selectedQuestionCount =
             Number(button.dataset.count);
 
-
         questionCountButtons.forEach(function (countButton) {
-
             countButton.classList.remove("selected");
-
         });
 
-
         button.classList.add("selected");
-
-
         console.log(
             "Selected question count:",
             selectedQuestionCount
         );
-
     });
-
 });
-
 
 // ========================================
 // DASHBOARD HERO START QUIZ (NAVIGATE TO CATEGORIES)
@@ -1174,29 +1156,21 @@ if (dashboardStartQuizButton) {
 
         quizScreen.style.display = "none";
 
-
         sections.forEach(function (section) {
 
             section.classList.remove("highlighted");
 
         });
 
-
         if (categoriesSection) {
 
             categoriesSection.classList.add("highlighted");
-
             categoriesSection.scrollIntoView({ behavior: "smooth" });
-
         }
-
 
         if (welcomeMessage) {
-
             welcomeMessage.textContent = "Categories";
-
         }
-
 
         navItems.forEach(function (navItem) {
 
@@ -1216,11 +1190,8 @@ if (dashboardStartQuizButton) {
                 navItem.classList.remove("active");
 
             }
-
         });
-
     });
-
 }
 
 
@@ -1302,21 +1273,16 @@ nextButton.addEventListener("click", function () {
         console.log(
             "Please select an answer first."
         );
-
         return;
-
     }
-
 
     userAnswers[currentQuestionIndex] =
         selectedAnswer;
-
 
     console.log(
         "Saved answers:",
         userAnswers
     );
-
 
     if (
         currentQuestionIndex <
@@ -1325,6 +1291,14 @@ nextButton.addEventListener("click", function () {
 
         currentQuestionIndex++;
 
+        quizProgress.category = selectedCategory;
+        quizProgress.selectedQuestions = selectedQuestions;
+        quizProgress.currentQuestionIndex = currentQuestionIndex;
+        quizProgress.userAnswers = userAnswers;
+        quizProgress.score = score;
+        console.log(quizProgress);
+
+        saveQuizProgress();
         showQuestion();
 
     }
@@ -1410,7 +1384,6 @@ resultExitButton.addEventListener(
     exitQuiz
 );
 
-
 // ========================================
 // RESTART QUIZ
 // ========================================
@@ -1446,3 +1419,19 @@ restartButton.addEventListener("click", function () {
     showQuestion();
 
 });
+
+// ========================================
+// Continue quiz from dashboard
+// ========================================
+
+function saveQuizProgress() {
+    // save current quiz state
+}
+
+function loadQuizProgress() {
+    // get saved quiz
+}
+
+function clearQuizProgress() {
+    // remove completed quiz
+}
